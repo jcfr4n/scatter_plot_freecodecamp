@@ -1,24 +1,23 @@
-
-body .container .main{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+body .container .main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 svg {
-    margin: auto;
-    background-color: green;
+  margin: auto;
+  background-color: green;
 }
 
-#legend{
-    margin: auto;
-    margin-top: 1rem;
-    padding: 3px;
-    border: 2px solid black;
-    border-radius: 5px;
-    text-align: center;
-}  
+#legend {
+  margin: auto;
+  margin-top: 1rem;
+  padding: 3px;
+  border: 2px solid black;
+  border-radius: 5px;
+  text-align: center;
+}
 
 #tooltip {
   display: flex;
@@ -30,7 +29,7 @@ svg {
   height: auto;
   padding: 2px;
   font: 12px;
-  background: lightsteelblue;
+  background: rgb(109, 190, 157);
   box-shadow: 1px 1px 10px;
   border-radius: 2px;
   pointer-events: none;
