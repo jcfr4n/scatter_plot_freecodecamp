@@ -10,3 +10,28 @@ svg {
     margin: auto;
     background-color: green;
 }
+
+#legend{
+    margin: auto;
+    margin-top: 1rem;
+    padding: 3px;
+    border: 2px solid black;
+    border-radius: 5px;
+    text-align: center;
+}  
+
+#tooltip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  text-align: center;
+  width: 200px;
+  height: auto;
+  padding: 2px;
+  font: 12px;
+  background: lightsteelblue;
+  box-shadow: 1px 1px 10px;
+  border-radius: 2px;
+  pointer-events: none;
+}

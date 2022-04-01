@@ -10,6 +10,12 @@ let xAxis;
 let yScale;
 let yAxis;
 
+let tooltip = d3
+  .select(".main")
+  .append("div")
+  .attr("id", "tooltip")
+  .style("opacity", 0);
+
 function drawSvgHolder(){
     d3.select('#svgHolder')
         .attr('width',width)
@@ -18,12 +24,13 @@ function drawSvgHolder(){
 
 function generateScales(data) {
     xScale = d3.scaleLinear()
-                .domain([d3.min(data, (item) => item.Year),d3.max(data, (item) => item.Year)])
-                .range([padding,width-padding]);
+                .domain([d3.min(data, (item) => item.Year - 1),d3.max(data, (item) => item.Year + 1)])
+                .range([padding,width - (padding)]);
 
     yScale = d3.scaleTime()
-                .domain([d3.min(data,(item)=> new Date(item.Seconds * 1000)),d3.max(data,(item)=> new Date(item.Seconds * 1000))])
+                .domain([d3.min(data,(item)=> new Date((item.Seconds - 5)  * 1000)),d3.max(data,(item)=> new Date((item.Seconds + 5) * 1000))])
                 .range([padding, height - padding]);
+
 }
 
 function drawAxis() {
@@ -32,13 +39,13 @@ function drawAxis() {
     yAxis = d3.axisLeft(yScale)
                 .tickFormat(d3.timeFormat('%M:%S'));
 
-    d3.select('svg')
+    d3.select('#svgHolder')
         .append('g')
         .call(xAxis)
         .attr('id','x-axis')
         .attr('transform','translate(0, ' + (height - padding) + ')');
 
-    d3.select('svg')
+    d3.select('#svgHolder')
         .append('g')
         .call(yAxis)
         .attr('id','y-axis')
@@ -46,7 +53,7 @@ function drawAxis() {
 }
 
 function drawPoints(data) {
-    d3.select('svg')
+    d3.select('#svgHolder')
         .selectAll('circle')
         .data(data)
         .enter()
@@ -64,13 +71,37 @@ function drawPoints(data) {
         })
         .attr('cy', (item) => {
             return yScale(new Date(item.Seconds * 1000));
+        })
+        .attr('fill',(item) => {
+            return (item.Doping != '') ? 'orange' : 'black';
+        })
+        .on("mouseover", function (event, item) {
+            let xDot = this.getAttribute("cx");
+            let yDot = this.getAttribute("cy");
+    
+          tooltip.transition().duration(200).style("opacity", 0.9);
+    
+          tooltip
+            .html(item.Year + '<br>' + item.Doping + '<br><br>' + item.Name)
+            .attr("id", "tooltip")
+            .attr("data-Year", item.Year)
+            .attr("top", yDot)
+            .attr("left", xDot)
+            .attr("transform", function (d, i){
+                console.log(i);
+                return 'translate (0,' + (height/2 - i * 20) + ')';
+            });
+        })
+        .on("mouseout", function () {
+          tooltip.transition().duration(200).style("opacity", 0);
         });
+
 }
 
 
 d3.json(urlData)
 .then((data) => {
-    console.table(data);
+    console.log(data);
     drawSvgHolder();
     generateScales(data);
     drawAxis();
